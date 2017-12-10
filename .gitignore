@@ -1,6 +1,6 @@
 *.o
 *.out
-*.cfg
+*.gch
 *.swp
 
 
