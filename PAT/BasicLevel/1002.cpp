@@ -6,8 +6,12 @@
 using namespace std;
 void print(int i){
      switch(i){
-            case 0:cout<<"ling"<<" ";break;
-            case 1:cout<<"yi"<<" ";break;
+            case 0:
+                cout<<"ling"<<" ";
+                break;
+            case 1:
+                cout<<"yi"<<" ";
+                break;
             case 2:
                 cout<<"er"<<" ";
                 break;
