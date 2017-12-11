@@ -41,40 +41,46 @@ void print(int i){
 
 int main (void){
     int sum=0;
-    char fake_bits[100]={'a'};
+    char fake_bits[101];
     cin>>fake_bits;
-    for(int i=0;i<100;i++){
-        switch(fake_bits[i]){
-            case '1':
-                sum+=1;
-                break;
-            case '2':
-                sum+=2;
-                break;
-            case '3':
-                sum+=3;
-                break;
-            case '4':
-                sum+=4;
-                break;
-            case '5':
-                sum+=5;
-                break;
-            case '6':
-                sum+=6;
-                break;
-            case '7':
-                sum+=7;
-                break;
-            case '8':
-                sum+=8;
-                break;
-            case '9':
-                sum+=9;
-                break;
-            default:
-                sum+=0;
-        }
+    // for(int i=0;i<100;i++){
+    //     switch(fake_bits[i]){
+    //         case '1':
+    //             sum+=1;
+    //             break;
+    //         case '2':
+    //             sum+=2;
+    //             break;
+    //         case '3':
+    //             sum+=3;
+    //             break;
+    //         case '4':
+    //             sum+=4;
+    //             break;
+    //         case '5':
+    //             sum+=5;
+    //             break;
+    //         case '6':
+    //             sum+=6;
+    //             break;
+    //         case '7':
+    //             sum+=7;
+    //             break;
+    //         case '8':
+    //             sum+=8;
+    //             break;
+    //         case '9':
+    //             sum+=9;
+    //             break;
+    //         default:
+    //             sum+=0;
+    //     }
+    // }
+
+
+    //上面这种求sum的方法太low,可以利用相同的数字与字符ascii之间对应的对应关系
+    for(int i=0;fake_bits[i]!='\0';i++){
+        sum+=(int)(fake_bits[i]-48);
     }
     //根据题意可知，sum的最大值为9900,最多的位数为４位
     int bits[4]={0};
