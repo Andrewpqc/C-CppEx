@@ -1,5 +1,5 @@
 /**
- * 1015　德才论
+ * 1015　德才论　部分正确，超时
  */ 
 #include <iostream>
 #include <algorithm>
@@ -11,10 +11,26 @@ typedef struct Node{
     int caiScore;//才分
 }Student; 
 
+//定义排序规则 感觉这段代码好恶心:(
+// 当某类考生中有多人总分相同时，按其德分降序排列；若德分也并列，则按准考证号的升序输出。
 bool sort_key(Student& s1,Student& s2){
-    if((s1.deScore+s1.caiScore)>(s2.deScore+s2.caiScore))
+    if((s1.deScore+s1.caiScore)>(s2.deScore+s2.caiScore)){
         return true;
-    
+    }
+    else if((s1.deScore+s1.caiScore)==(s2.deScore+s2.caiScore)){
+        if(s1.deScore>s2.deScore){
+            return true;
+        }
+        else if(s1.deScore==s2.deScore){
+            return s1.id<s2.id;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return false;
+    }
 }
 
 void print(Student& s){
@@ -28,6 +44,7 @@ int main (void){
      * H H<100 优先录取线
      */ 
     int N,L,H;
+    int no_consider_students_num=0;
     cin>>N>>L>>H;
     vector<Student> all_students;
     vector<Student> level_one_students;
@@ -59,6 +76,7 @@ int main (void){
         }
         else if(iter->caiScore<H&&iter->deScore<H){
             //不在录取考虑范围之类的学生，直接排除
+            ++no_consider_students_num;
         }
         else {
             //其他
@@ -75,6 +93,8 @@ int main (void){
     sort(level_three_students.begin(),level_three_students.end(),sort_key);
     sort(other_considered_students.begin(),other_considered_students.end(),sort_key);
 
+    //公布排名的人数
+    cout<<N-no_consider_students_num<<endl;
     //输出
     for_each(level_one_students.begin(),level_one_students.end(),print);
     for_each(level_two_students.begin(),level_two_students.end(),print);
