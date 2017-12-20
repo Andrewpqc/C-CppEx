@@ -5,7 +5,7 @@ using namespace std;
 
 class Str{
     private:
-        char str[INITLEN];
+        char* str;
         int length=INITLEN;
         int capicity=INITEN;
     public:
