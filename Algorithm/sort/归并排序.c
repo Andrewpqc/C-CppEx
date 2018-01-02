@@ -30,6 +30,9 @@ void merge(int *array,int a,int b,int c){
             array[a+k]=L[l++];
         else
             array[a+k]=R[r++]; 
+    
+    free(L);
+    free(R);
 }
 
 //上面的合并方式使用INT_MAX作为哨兵，所以要求待排序的数组中的数据不含INT_MAX

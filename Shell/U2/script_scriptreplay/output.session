@@ -1,0 +1,23 @@
+脚本启动于 2018年01月02日 星期二 15时29分52秒
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ sl
+程序“sl”尚未安装。 您可以使用以下命令安装：
+sudo apt install sl
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ clear
+[3;J[H[2J]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ ls
+output.session  thiming.log
+]0;andrew@andrew-Lenovo: ~/C-CppEx/Shell/U2/script_scriptreplayandrew@andrew-Lenovo:~/C-CppEx/Shell/U2/script_scriptreplay$ exit
+exit
+
+脚本完成，于 2018年01月02日 星期二 15时30分03秒

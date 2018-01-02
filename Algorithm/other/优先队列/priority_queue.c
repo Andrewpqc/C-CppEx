@@ -21,21 +21,6 @@ void max_heapify(int * a,int size,int i){
     }
 }
 
-//堆排序
-void heap_sort(int * a,int size){
-    for(int i=size/2-1;i>=0;i--){
-        max_heapify(a,size,i);
-    }
-    
-    for (int i=size-1; i>0; i--){
-		// Move current root to end
-		int j=a[i];
-        a[i]=a[0];
-        a[0]=j;
-		// call max heapify on the reduced heap
-		max_heapify(a, i, 0);
-	}
-}
 
 //建堆
 void build_heap(int * a,int size){
@@ -43,10 +28,16 @@ void build_heap(int * a,int size){
         max_heapify(a,size,i);
     
 }
+//获取数组a的最大值
+int maximum(int*a){
+    return a[0];
+}
+
+int extract_max(int* a)
 
 int main (void){
     int a[5]={1,2,3,4,5};
-    heap_sort(a,5);
+    build_heap(a,5);
     for(int i=0;i<5;i++){
         printf("%d ",a[i]);
     }
