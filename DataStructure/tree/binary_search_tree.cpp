@@ -4,6 +4,8 @@
  * 遍历二叉搜索树　前中后
  * 搜寻二叉搜索树　最大的节点，最小节点，具有指定关键字的节点，前驱，后继
  * 删除指定节点
+ * 
+ * https://lufficc.com/blog/binary-search-tree
  **/ 
 #include <iostream>
 #include <cstdlib>
@@ -267,23 +269,58 @@ void bst_delete(BST_p node){
         delete node;
     }
 
-    //如果需要删除的节点有两个孩子a,b的话，需要进行下面的操作：
-    //让左子树left连接到右子树right中关键值最小的那个节点的左枝上，然后让node节点的父节点指向right
-    //最后释放node节点所指向的内存块
+    //如果需要删除的节点d有两个孩子a,b的话，需要进行下面的操作：
+    //找到节点d的后继节点successor(显然successor肯定在d的右子树上，因为此时d存在右节点)
+    //下面要分两种情况讨论了，successor是否为d的右节点。
+    //如果successor就为d的右节点：直接将successor替换d，然后将d的左子树连接到successor的左节点上(原本successor的左孩子为空)
+    //如果successor不为d的右节点：首先将让successor的右节点替换successor,然后让successor替换d
+    //注意上面两种情况都要注意删除d所指向的内存块
     else if(node->left!=NULL&& node->right!=NULL){
         BST_p left=node->left;//左子树的根节点
         BST_p right=node->right;//右子树的根节点
         BST_p parent=node->parent;//父节点
-        BST_p right_min=minimum(right);//右子树的最小节点
-        //将左子树连接到右子树最小节点的的左枝上
-        right_min->left=left;
-        left->parent=right_min;
-        if(node->key>parent->key){//node节点是父节点的右孩子
-            parent->right=right;
-            right->parent=parent;
+        BST_p successor=minimum(right);//node节点的后继节点,由于存在右子树，所以这里直接使用了求右子树的最小节点的函数
+        if(successor->key==right->key){//后继节点就是node的右孩子，这里假设树中不存在key值相同的节点
+            //将node的左支连接到后继节点的左孩子上(初始时该节点为空)
+            successor->left=left;
+            left->parent=successor;
+            //将后继节点提升到node的位置
+            //这里首先需要判断node是其父节点的左孩子还是右孩子
+            if(node->key>parent->key){
+                //node是其父节点的右节点
+                parent->right=successor;
+                successor->parent=parent;
+            }else{
+                 //node是其父节点的左节点
+                parent->left=successor;
+                successor->parent=parent;
+            }
         }else{
-            parent->left=right;
-            right->parent=parent;
+            //后继节点successor不是node的右孩子
+            //首先将successor的右节点提升到successor的位置，然后将node的左支连接到
+            //successor的左支上(初始为空支)，然后将successor提升到node的位置
+
+            BST_p succ_parent=successor->parent;//后继节点的父节点
+            
+            //这里后继节点一定位于其父节点的左支，所以直接将后继节点的右节点连接到
+            //后继节点的父节点的左支上
+            succ_parent->left=successor->right;
+            successor->right->parent=succ_parent;
+
+            //将node的左子树连接到后继节点的左支上(该支初始时为空)
+            successor->left=left;
+            left->parent=successor;
+
+            //将successor提升到node的位置，同样的需要判断node位于其父结点的左还是右
+            if(node->key>parent->key){
+                //node是其父节点的右节点
+                parent->right=successor;
+                successor->parent=parent;
+            }else{
+                 //node是其父节点的左节点
+                parent->left=successor;
+                successor->parent=parent;
+            }
         }
         delete node;
     }
