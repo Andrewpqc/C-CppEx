@@ -31,7 +31,8 @@ void bst_insert(BST_p& root,int k,BST_p parent=NULL){
     if(root==NULL){
         root=new BST;
         root->key=k;
-        root->left=NULL;
+        root->lls
+        eft=NULL;
         root->right=NULL;
         root->parent=parent;//根节点没有父节点
     }
