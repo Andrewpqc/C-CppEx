@@ -18,7 +18,7 @@ typedef struct avl_node{
 //需要将root的左孩子作为新的根节点,右旋
 static avl_node_ptr LL_right_rotate(avl_node_ptr root){
     avl_node_ptr new_root = root->left;
-    root->left = new_root->right;
+    root->left = new_root->right;Seen this question in a real interview be
     new_root->right = root;
     new_root->h = MAX(HEIGHT(new_root->left), HEIGHT(new_root->right)) + 1;
     root->h = MAX(HEIGHT(root->left), HEIGHT(root->right)) + 1;
@@ -168,4 +168,5 @@ int main(void)
     root=avl_delete(root, 2);
 
     inorder(root);
+    return 0;
 }
