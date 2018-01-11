@@ -1,26 +1,28 @@
 /**
- * 考试座位号　用平衡二叉树解决
+ * 平衡二叉树　考试座位号
  **/
+
 #include <iostream>
+#include <string>
 using namespace std;
 
-typedef struct date_node{
-    int score;
-    int count;
+typedef struct node{
+    string examinee_id;
+    int exam_num;
+    int try_num;
 } Data;
 
-typedef struct avl_node{
-    Data data;
-    int height;
-
-    struct avl_node *left;
-    struct avl_node *right;
+typedef struct avlnode{
+    int hight;
+    Data d;
+    struct avlnode *left;
+    struct avlnode *right;
 } avl_node, *avl_node_ptr;
 
 int get_hight(avl_node_ptr node){
     if (!node)
         return 0;
-    return node->height;
+    return node->hight;
 }
 
 int max(int a, int b){
@@ -37,8 +39,8 @@ avl_node_ptr LL_right_rotate(avl_node_ptr root){
     avl_node_ptr new_root = root->left;
     root->left = new_root->right;
     new_root->right = root;
-    new_root->height = max(get_hight(new_root->left), get_hight(new_root->right)) + 1;
-    root->height = max(get_hight(root->left), get_hight(root->right)) + 1;
+    new_root->hight = max(get_hight(new_root->left), get_hight(new_root->right)) + 1;
+    root->hight = max(get_hight(root->left), get_hight(root->right)) + 1;
     return new_root;
 }
 
@@ -46,8 +48,8 @@ avl_node_ptr RR_left_rotate(avl_node_ptr root){
     avl_node_ptr new_root = root->right;
     root->right = new_root->left;
     new_root->left = root;
-    new_root->height = max(get_hight(new_root->left), get_hight(new_root->right)) + 1;
-    root->height = max(get_hight(root->left), get_hight(root->right)) + 1;
+    new_root->hight = max(get_hight(new_root->left), get_hight(new_root->right)) + 1;
+    root->hight = max(get_hight(root->left), get_hight(root->right)) + 1;
     return new_root;
 }
 
@@ -65,82 +67,74 @@ avl_node_ptr re_balance(avl_node_ptr node){
     if (!node)
         return node;
     int bf = get_bf(node);
-    int bf_left = get_bf(node->left);
-    int bf_right = get_bf(node->right);
-    if (bf > 1 && bf_left > 0) //LL
+    int bf_l = get_bf(node->left);
+    int bf_r = get_bf(node->right);
+    if (bf > 1 && bf_l > 0)
         node = LL_right_rotate(node);
-    if (bf > 1 && bf_left < 0) //LR
+    if (bf > 1 && bf_l < 0)
         node = LR_left_right_rotate(node);
-    if (bf < -1 && bf_right > 0) //RL
-        node = RL_right_left_rotate(node);
-    if (bf < -1 && bf_right < 0) //RR
+    if (bf < -1 && bf_r < 0)
         node = RR_left_rotate(node);
+    if (bf < -1 && bf_r > 0)
+        node = RL_right_left_rotate(node);
     return node;
 }
 
-avl_node_ptr avl_insert(avl_node_ptr root, int score){
+avl_node_ptr avl_insert(avl_node_ptr root, int try_num, int exam_num, string examinee_id){
     if (!root){
         Data d;
-        d.score = score;
-        d.count = 1;
+        d.try_num = try_num;
+        d.exam_num = exam_num;
+        d.examinee_id = examinee_id;
         root = new avl_node;
-        root->height = 1;
-        root->data = d;
+        root->d = d;
+        root->hight = 1;
         root->left = NULL;
         root->right = NULL;
-        return root;
     }
-    if (score < root->data.score)
-        root->left = avl_insert(root->left, score);
-    else if (score > root->data.score)
-        root->right = avl_insert(root->right, score);
+
+    if (try_num < root->d.try_num)
+        root->left = avl_insert(root->left, try_num, exam_num, examinee_id);
+    else if (try_num > root->d.try_num)
+        root->right = avl_insert(root->right, try_num, exam_num, examinee_id);
     else
-        root->data.count++;
-    root->height = max(get_hight(root->left), get_hight(root->right)) + 1;
+        return root;
+
+    root->hight = max(get_hight(root->left), get_hight(root->right)) + 1;
     root = re_balance(root);
     return root;
 }
 
-avl_node_ptr avl_search(avl_node_ptr root, int score){
-    if (root == NULL || score == root->data.score)
+avl_node_ptr avl_search(avl_node_ptr root, int try_num){
+    if (!root || try_num == root->d.try_num)
         return root;
-    while (root && score != root->data.score){
-        if (score < root->data.score){
+    while (root && root->d.try_num != try_num){
+        if (try_num < root->d.try_num)
             root = root->left;
-        }
-        else if (score > root->data.score){
+        else
             root = root->right;
-        }
     }
     return root;
 }
 
-int main(void){
+int main(void)
+{
     avl_node_ptr root = NULL;
-    int score_count;
-    int search_count;
-    int temp_score;
-    int temp_search;
-    cin >> score_count;
-    for (int i = 0; i < score_count; i++){
-        cin >> temp_score;
-        root = avl_insert(root, temp_score);
+    int count;
+    cin >> count;
+    string s;
+    int a, b;
+    for (int i = 0; i < count; i++){
+        cin >> s >> a >> b;
+        root = avl_insert(root, a, b, s);
     }
-    cin >> search_count;
-    for (int i = 0; i < search_count - 1; i++){
-        cin >> temp_search;
-        avl_node_ptr target = avl_search(root, temp_search);
-        if (!target)
-            cout << 0 << " ";
-        else
-            cout << target->data.count << " ";
+    int count2;
+    int temp;
+    cin >> count2;
+    for (int i = 0; i < count2; i++){
+        cin >> temp;
+        avl_node_ptr t = avl_search(root, temp);
+        cout << t->d.examinee_id << " " << t->d.exam_num << endl;
     }
-    //最后不能留空格，单独处理
-    cin >> temp_search;
-    avl_node_ptr target = avl_search(root, temp_search);
-    if (!target)
-        cout << 0;
-    else
-        cout << target->data.count;
     return 0;
 }
