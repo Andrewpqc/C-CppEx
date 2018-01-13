@@ -4,8 +4,6 @@
  * 遍历二叉搜索树　前中后
  * 搜寻二叉搜索树　最大的节点，最小节点，具有指定关键字的节点，前驱，后继
  * 删除指定节点
- * 
- * https://lufficc.com/blog/binary-search-tree
  **/ 
 #include <iostream>
 #include <cstdlib>
