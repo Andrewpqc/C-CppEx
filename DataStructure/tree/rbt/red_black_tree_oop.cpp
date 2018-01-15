@@ -19,7 +19,7 @@ class RBTree{
     void LL_right_rotate(rbt_node_ptr node);
     void RR_left_rotate(rbt_node_ptr node);
     void rbt_insert_fixup(rbt_node_ptr node);
-    void rbt_delete_fixup(rbt_node_ptr node);
+    void rbt_delete_fixup(rbt_node_ptr child,rbt_node_ptr parent);
     void rbt_destory(rbt_node_ptr node);
 
   public:
@@ -348,8 +348,88 @@ bool RBTree::rbt_insert(int k){
     return true;
 }
 
-void RBTree::rbt_delete_fixup(rbt_node_ptr node){
-    ;
+void RBTree::rbt_delete_fixup(rbt_node_ptr node,rbt_node_ptr parent){
+    rbt_node_ptr other;
+    while ((!node || node->color==false) && node != root)
+    {
+        if (parent->left == node)
+        {
+            other = parent->right;
+            if (other->color==true)
+            {
+                // Case 1: x的兄弟w是红色的  
+                other->color=false;
+                parent->color=true;
+                RR_left_rotate(parent);
+                other = parent->right;
+            }
+            if ((!other->left || other->left->color==false) &&(!other->right || other->right->color==false))
+            {
+                // Case 2: x的兄弟w是黑色，且w的俩个孩子也都是黑色的  
+                other->color=true;
+                node = parent;
+                parent = node->parent;
+            }
+            else
+            {
+                if (!other->right || other->right->color==false)
+                {
+                    // Case 3: x的兄弟w是黑色的，并且w的左孩子是红色，右孩子为黑色。  
+                    other->left->color=false;
+                    other->color=true;
+                    LL_right_rotate(other);
+                    other = parent->right;
+                }
+                // Case 4: x的兄弟w是黑色的；并且w的右孩子是红色的，左孩子任意颜色。
+                other->color=parent->color;
+                parent->color=false;
+                other->right->color=false;
+                RR_left_rotate(parent);
+                node = root;
+                break;
+            }
+        }
+        else
+        {
+            other = parent->left;
+            if (other->color==true)
+            {
+                // Case 1: x的兄弟w是红色的  
+                other->color=false;
+                parent->color=true;
+                LL_right_rotate(parent);
+                other = parent->left;
+            }
+            if ((!other->left || other->left->color==false) &&
+                (!other->right || other->right->color==false))
+            {
+                // Case 2: x的兄弟w是黑色，且w的俩个孩子也都是黑色的  
+                other->color=true;
+                node = parent;
+                parent = node->parent;
+            }
+            else
+            {
+                if (!other->left || other->left->color==false)
+                {
+                    // Case 3: x的兄弟w是黑色的，并且w的左孩子是红色，右孩子为黑色。  
+                    other->right->color=false;
+                    other->color=true;
+                    RR_left_rotate(other);
+                    other = parent->left;
+                }
+                // Case 4: x的兄弟w是黑色的；并且w的右孩子是红色的，左孩子任意颜色。
+                other->color=parent->color;
+                parent->color=false;
+                other->left->color=false;
+                LL_right_rotate(parent);
+                node = root;
+                break;
+            }
+        }
+    }
+    if (node)
+        node->color=false;
 }
 
 bool RBTree::rbt_delete(int k){
@@ -358,8 +438,9 @@ bool RBTree::rbt_delete(int k){
         cout << "don't have " << k << endl;
         return false;
     }
+
     bool origin_color=node->color;
-    rbt_node_ptr  need_fix_node=NULL;
+    rbt_node_ptr child,parent=node->parent;
     //需要删除的节点的两个孩子节点都为空
     if(node->left==NULL&&node->right==NULL){
         if(node->parent==NULL){//删除的是根节点
@@ -375,6 +456,7 @@ bool RBTree::rbt_delete(int k){
     }
     //左孩子为空，右孩子不为空
     else if(node->left==NULL&&node->right!=NULL){
+        child=node->right;
         if(node->parent==NULL){//删除的是根节点
             this->root=node->right;
             node->right->parent=NULL;
@@ -390,6 +472,7 @@ bool RBTree::rbt_delete(int k){
     }
     //左孩子不为空，右孩子为空
     else if(node->right==NULL&&node->left!=NULL){
+        child=node->left;
         if(node->parent==NULL){//删除的节点为根节点
             this->root=node->left;
             node->left->parent=NULL;
@@ -407,12 +490,17 @@ bool RBTree::rbt_delete(int k){
     //左右孩子均不为空
     else{
         rbt_node_ptr succ_node=rbt_successor(node);
+        origin_color=succ_node->color;
+        child=succ_node->right;
+        parent=succ_node->parent;
         if (succ_node == node->right){ //后继节点就是node的右孩子
             node->left->parent = succ_node;
             succ_node->left = node->left;
+            succ_node->color=node->color;
             //删除节点为根节点
             if(node->parent==NULL){
                 root=succ_node;
+                root->color=false;
                 succ_node->parent=NULL;
             }
             //删除节点不为根节点
@@ -437,6 +525,7 @@ bool RBTree::rbt_delete(int k){
             //删除节点为根节点
             if(node->parent==NULL){
                 root=succ_node;
+                root->color=false;
                 succ_node->parent=NULL;
             }
             //删除节点不为根节点
@@ -450,9 +539,12 @@ bool RBTree::rbt_delete(int k){
             delete node;
         }
     }
+
+    if(origin_color==false){
+        rbt_delete_fixup(child,parent);
+    }
     return true;
 }
-
 
 int main(void){
     RBTree t1;
@@ -468,11 +560,11 @@ int main(void){
     t1.rbt_insert(30);
     t1.rbt_insert(85);
     t1.levelorder_tree_walk();
-    t1.rbt_delete(4);
+    // t1.rbt_delete(4);
+    t1.rbt_delete(2);
     cout << endl;
     t1.levelorder_tree_walk();
     cout << endl;
     t1.inorder_tree_walk();
-
     return 0;
 }
