@@ -39,8 +39,8 @@ int main(void){
         }
     }
     else if (F == 'D'){
-        string num="";
-        char alpha1,alpha2;
+        string num = "";
+        char alpha1, alpha2;
         alpha1 = getchar();
         alpha2 = getchar();
         if (alpha2 == (char)10){
